@@ -7,6 +7,7 @@ from cliff.lister import Lister
 from fiwareclient.orion.model.attribute import Attribute
 from fiwareclient.orion.model.metadata import Metadata
 from fiwareclient.orion.v2.client import OrionClient
+from fiwareclient.lib.parser import Parser
 
 
 class EntityList(Lister):
@@ -45,48 +46,30 @@ class EntityCreate(Command):
         parser = super(EntityCreate, self).get_parser(prog_name)
         parser.add_argument('entity_id', help="Entity ID")
         parser.add_argument('entity_type', help="Entity Type")
-        parser.add_argument('attributes', help="Attributes")
+        parser.add_argument('attributes', help="Attribute")
         parser.add_argument('-fs', default="", help='FIWARE Service')
         parser.add_argument('-fsp', default="", help='FIWARE Service Path')
 
         return parser
 
     def take_action(self, parsed_args):
-        print("test")
         result = self.create_entity(parsed_args)
         return result
 
     def create_entity(self, parsed_args):
         attributes = self.parse_attributes(parsed_args.attributes)
-        print(attributes)
-        #oc = OrionClient(fs=parsed_args.fs, fsp=parsed_args.fsp)
-        #oc.entity_create(parsed_args.entity_id,
-        #                 parsed_args.entity_type,
-        #                 attributes)
+        oc = OrionClient(fs=parsed_args.fs, fsp=parsed_args.fsp)
+        oc.entity_create(parsed_args.entity_id,
+                         parsed_args.entity_type,
+                         attributes)
 
     def parse_attributes(self, attrs_json):
         parsed_list = []
         attrs_dict = json.loads(attrs_json)
-        for attr_name in attrs_dict:
-            metadata = None
-            if attrs_dict[attr_name].get('metadata'):
-                metadata = self.parse_metadata(
-                               attrs_dict[attr_name].get('metadata')
-                           )
-            attribute = Attribute(attr_name, attrs_json[attr_name],
-                                  attrs_json[attr_name].attr_type,
-                                  attrs_json[attr_name].attr_value,
-                                  metadata)
-            print(attribute.json())
+        for attr_name, v in attrs_dict.items():
+            parser = Parser()
+            attribute = parser.dict_to_attribute({attr_name: v})
             parsed_list.append(attribute)
-        #for attr_name in attrs.keys():
-        #    metadata_obj = Metadata()
-        #    for metadata in attrs[attr_name]["metadata"]:
-        #        metadata_obj.add_metadata(attrs[attr_name]["metadata"]["name"],
-        #                                  attrs[attr_name]["metadata"]["type"],
-        #                                  attrs[attr_name]["metadata"]["value"])
-        #    attribute = Attribute(attr_name, attrs[attr_name]["type"], attrs[attr_name]["value"], metadata)
-        #    attrs_list.append(attribute)
         return parsed_list
 
     def parse_metadata(self, metadata_dict):
