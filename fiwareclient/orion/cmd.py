@@ -7,6 +7,7 @@ from cliff.lister import Lister
 from fiwareclient.orion.model.attribute import Attribute
 from fiwareclient.orion.model.metadata import Metadata
 from fiwareclient.orion.v2.client import OrionClient
+from fiwareclient.lib.config import Config
 from fiwareclient.lib.parser import Parser
 
 
@@ -27,7 +28,11 @@ class EntityList(Lister):
         return result
 
     def list_entities(self, parsed_args):
-        oc = OrionClient(fs=parsed_args.fs, fsp=parsed_args.fsp)
+        config = Config()
+        oc = OrionClient(host=config.orion.host,
+                         port=config.orion.port,
+                         fs=parsed_args.fs,
+                         fsp=parsed_args.fsp)
         entities = oc.entities_list()
         return (('Entity ID', 'Entity Type', 'Attributes'),
                 ((entity.entity_id,
