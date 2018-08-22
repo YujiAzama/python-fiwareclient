@@ -63,7 +63,11 @@ class EntityCreate(Command):
 
     def create_entity(self, parsed_args):
         attributes = self.parse_attributes(parsed_args.attributes)
-        oc = OrionClient(fs=parsed_args.fs, fsp=parsed_args.fsp)
+        config = Config()
+        oc = OrionClient(host=config.orion.host,
+                         port=config.orion.port,
+                         fs=parsed_args.fs,
+                         fsp=parsed_args.fsp)
         oc.entity_create(parsed_args.entity_id,
                          parsed_args.entity_type,
                          attributes)
