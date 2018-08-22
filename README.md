@@ -14,7 +14,7 @@ $ sudo python3 setup.py install
 $ fiware entity-list
 ```
 
-If you have remote orion host, you specify host name as environment.
+If you have remote orion host, you specify host name as environment variable.
 
 ```bash
 $ export ORION_HOST=orion-host
