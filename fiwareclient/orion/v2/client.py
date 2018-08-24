@@ -12,14 +12,14 @@ class OrionClient(object):
     def __init__(self, host="localhost", port=1026,
                  tls=False, fs="", fsp=""):
         schema = "https://" if tls else "http://"
-        self.base_url = schema + host + ":" + str(port)
+        self.base_url = schema + host + ":" + str(port) + "/v2"
         self.headers = {
             'Fiware-Service': fs,
             'Fiware-ServicePath': fsp
         }
 
     def entities_list(self):
-        url = self.base_url + '/v2/entities'
+        url = self.base_url + '/entities'
         response = requests.get(url, headers=self.headers)
         entities = []
         for entity in response.json():
@@ -28,7 +28,7 @@ class OrionClient(object):
         return entities
 
     def entity_show(self, entity_id):
-        url = self.base_url + '/v2/entities/' + entity_id
+        url = self.base_url + '/entities/' + entity_id
         response = requests.get(url, headers=self.headers)
         return self._dict_to_entity_object(response.json())
 
@@ -36,7 +36,7 @@ class OrionClient(object):
         entity = Entity(entity_id, entity_type)
         for attribute in attributes:
             entity.add_attribute(attribute)
-        url = self.base_url + '/v2/entities'
+        url = self.base_url + '/entities'
         header = {'Content-Type': 'application/json',
                   'Accept': 'application/json'}
         header.update(self.headers)
@@ -44,11 +44,11 @@ class OrionClient(object):
                                  data=json.dumps(entity.json()))
 
     def entity_delete(self, entity_id):
-        url = self.base_url + '/v2/entities'
-        response = requests.delete(url, headers=header)
+        url = self.base_url + '/entities/' + entity_id
+        response = requests.delete(url, headers=self.headers)
 
     def entity_update(self, entity_id, attr_name, attr_value):
-        url = (self.base_url + '/v2/entities/' + entity_id
+        url = (self.base_url + '/entities/' + entity_id
                + '/attrs/' + attr_name + '/value')
         header = {'Content-Type': 'text/plain'}
         header.update(self.headers)

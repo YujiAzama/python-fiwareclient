@@ -16,6 +16,7 @@ setup(
         'fiwareclient.command': [
             'entity-list=fiwareclient.orion.cmd:EntityList',
             'entity-create=fiwareclient.orion.cmd:EntityCreate',
+            'entity-delete=fiwareclient.orion.cmd:EntityDelete',
         ],
     },
 )

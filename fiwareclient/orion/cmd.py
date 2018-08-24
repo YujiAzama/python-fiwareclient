@@ -88,3 +88,27 @@ class EntityCreate(Command):
                                   metadata_dict[metadata_name]["type"],
                                   metadata_dict[metadata_name]["value"])
         return metadata
+
+
+class EntityDelete(Command):
+    "Orion Entity Delete"
+
+    def get_parser(self, prog_name):
+        parser = super(EntityDelete, self). get_parser(prog_name)
+        parser.add_argument('entity_id', help="Entity ID")
+        parser.add_argument('-fs', help="FIWARE Service")
+        parser.add_argument('-fsp', help="FIWARE Service Path")
+
+        return parser
+
+    def take_action(self, parsed_args):
+        result = self.delete_entity(parsed_args)
+        return result
+
+    def delete_entity(self, parsed_args):
+        config = Config()
+        oc = OrionClient(host=config.orion.host,
+                         port=config.orion.port,
+                         fs=parsed_args.fs,
+                         fsp=parsed_args.fsp)
+        entities = oc.entity_delete(parsed_args.entity_id)
