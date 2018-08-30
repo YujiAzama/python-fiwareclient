@@ -94,7 +94,7 @@ class EntityDelete(Command):
     "Orion Entity Delete"
 
     def get_parser(self, prog_name):
-        parser = super(EntityDelete, self). get_parser(prog_name)
+        parser = super(EntityDelete, self).get_parser(prog_name)
         parser.add_argument('entity_id', help="Entity ID")
         parser.add_argument('-fs', help="FIWARE Service")
         parser.add_argument('-fsp', help="FIWARE Service Path")
@@ -112,3 +112,30 @@ class EntityDelete(Command):
                          fs=parsed_args.fs,
                          fsp=parsed_args.fsp)
         entities = oc.entity_delete(parsed_args.entity_id)
+
+
+class AttributeDataGet(Command):
+    "Attribute Data Get"
+
+    def get_parser(self, prog_name):
+        parser = super(AttributeDataGet, self).get_parser(prog_name)
+        parser.add_argument('entity_id', help="Entity ID")
+        parser.add_argument('attribute', help="Attribute Name")
+        parser.add_argument('-fs', help="FIWARE Service")
+        parser.add_argument('-fsp', help="FIWARE Service Path")
+
+        return parser
+
+    def take_action(self, parsed_args):
+        result = self.get_attribute_data(parsed_args)
+        print(result)
+
+    def get_attribute_data(self, parsed_args):
+        config = Config()
+        oc = OrionClient(host=config.orion.host,
+                         port=config.orion.port,
+                         fs=parsed_args.fs,
+                         fsp=parsed_args.fsp)
+        data = oc.attribute_data_get(parsed_args.entity_id,
+                                     parsed_args.attribute)
+        return data
