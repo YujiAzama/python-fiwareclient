@@ -20,4 +20,5 @@ setup(
             'attribute-data-get=fiwareclient.orion.cmd:AttributeDataGet',
         ],
     },
+    test_suite='fiwareclient/tests'
 )
