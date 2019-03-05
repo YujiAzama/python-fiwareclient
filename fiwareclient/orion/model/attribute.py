@@ -20,6 +20,13 @@ class Attribute(object):
 
         return attr
 
+    def get_metadata(self, name):
+        result = ""
+        for meta in metadata:
+            if meta.name == name:
+                result = meta
+        return result
+
     def metadata_formatter(self, metadatas):
         formatted_metadata = {}
         for metadata in metadatas:
