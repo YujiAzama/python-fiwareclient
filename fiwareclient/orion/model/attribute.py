@@ -22,7 +22,7 @@ class Attribute(object):
 
     def get_metadata(self, name):
         result = ""
-        for meta in metadata:
+        for meta in self.metadata:
             if meta.name == name:
                 result = meta
         return result
