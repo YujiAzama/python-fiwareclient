@@ -1,14 +1,18 @@
 class Metadata(object):
-    def __init__(self, metadata_name, metadata_type, metadata_value):
-        self.metadata_name = metadata_name
-        self.metadata_type = metadata_type
-        self.metadata_value = metadata_value
+    def __init__(self, name, type, value):
+        self.name = name
+        self.type = type
+        self.value = value
 
     def json(self):
-        return {"metadata": {
-                    self.metadata_name: {
-                        self.metadata_value,
-                        self.metadata_type}}}
+        return {
+                "metadata": {
+                    self.name: {
+                        self.value,
+                        self.type
+                    }
+                }
+            }
 
 
 if __name__ == '__main__':

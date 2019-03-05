@@ -2,13 +2,20 @@ from fiwareclient.orion.model.attribute import Attribute
 from fiwareclient.orion.model.metadata import Metadata
 
 class Entity(object):
-    def __init__(self, entity_id, entity_type):
-        self.entity_id = entity_id
-        self.entity_type = entity_type
+    def __init__(self, id, type):
+        self.id = id
+        self.type = type
         self.attributes = []
 
     def add_attribute(self, attr):
         self.attributes.append(attr)
+
+    def get_attribute(self, name):
+        result = ""
+        for attr in self.attributes:
+            if attr.name == name:
+                result = attr
+        return result
 
     def get_attributes_json(self):
         attributes = {}
@@ -19,8 +26,8 @@ class Entity(object):
 
     def json(self):
         entity = {
-            "id": self.entity_id,
-            "type": self.entity_type}
+            "id": self.id,
+            "type": self.type}
         for attr in self.attributes:
             entity.update(attr.json())
         return entity
@@ -35,3 +42,6 @@ if __name__ == "__main__":
     entity = Entity("sensor1", "Sensor")
     entity.add_attribute(attr)
     print(entity.json())
+    print(entity.id)
+    print(entity.type)
+    print(entity.attributes[0].name)

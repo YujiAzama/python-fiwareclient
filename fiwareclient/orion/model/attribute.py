@@ -2,18 +2,21 @@ from fiwareclient.orion.model.metadata import Metadata
 
 
 class Attribute(object):
-    def __init__(self, attr_name, attr_type, attr_value, metadata=[]):
-        self.attr_name = attr_name
-        self.attr_type = attr_type
-        self.attr_value = attr_value
+    def __init__(self, name, type, value, metadata=[]):
+        self.name = name
+        self.type = type
+        self.value = value
         self.metadata = metadata
 
     def json(self):
-        attr = {self.attr_name: {
-                    "type": self.attr_type,
-                    "value": self.attr_value}}
+        attr = {
+            self.name: {
+                "type": self.type,
+                "value": self.value
+            }
+        }
         if len(self.metadata):
-            attr[self.attr_name].update({"metadata": self.metadata_formatter(self.metadata)})
+            attr[self.name].update({"metadata": self.metadata_formatter(self.metadata)})
 
         return attr
 
@@ -37,3 +40,6 @@ if __name__ == "__main__":
     metadatas = [metadata1, metadata2]
     attr = Attribute("temp", "num", "28.5", metadatas)
     print(attr.json())
+    print(attr.name)
+    print(attr.value)
+    print(attr.type)
