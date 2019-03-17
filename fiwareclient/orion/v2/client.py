@@ -47,8 +47,7 @@ class OrionClient(object):
         url = self.base_url + '/entities/' + entity_id
         response = requests.delete(url, headers=self.headers)
 
-    def entity_update(self, entity_id, attr_name, attr_value):
-        # TODO:
+    def attribute_data_update(self, entity_id, attr_name, attr_value):
         url = (self.base_url + '/entities/' + entity_id
                + '/attrs/' + attr_name + '/value')
         header = {'Content-Type': 'text/plain'}
@@ -87,7 +86,7 @@ class OrionClient(object):
 
 
 if __name__ == '__main__':
-    client = OrionClient(fs='ool', fsp='/office')
+    client = OrionClient(host='118.27.13.26', fs='test', fsp='/test')
     entities = client.entities_list()
     #for entity in entities:
     #    pprint(entity.json())
@@ -96,7 +95,8 @@ if __name__ == '__main__':
     #print(entity.attributes[0].metadata.metadata)
 
     #attr = Attribute("temp", "number", "15.5")
-    #client.entity_update("sensor1", "temperature", 27.0)
+    #client.entity_create("room1", "Room", [attr])
 
-    value = client.attribute_data_get('urn:ngsi-ld:AirQualityObserved:KanekadanMySensor01', 'airQualityIndex')
+    client.attribute_data_update('room1', 'temp', 20)
+    value = client.attribute_data_get('room1', 'temp')
     print(value)
