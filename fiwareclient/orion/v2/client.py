@@ -43,6 +43,16 @@ class OrionClient(object):
         response = requests.post(url, headers=header,
                                  data=json.dumps(entity.json()))
 
+    def update_entity(self, entity_id, attrs):
+        body = {}
+        url = self.base_url + '/entities/' + entity_id + '/attrs'
+        header = {'Content-Type': 'application/json'}
+        for attr in attrs:
+            body.update(attr.json())
+        header.update(self.headers)
+        response = requests.patch(url, headers=header,
+                                  data=json.dumps(body))
+
     def entity_delete(self, entity_id):
         url = self.base_url + '/entities/' + entity_id
         response = requests.delete(url, headers=self.headers)
@@ -94,9 +104,10 @@ if __name__ == '__main__':
     #entity = client.entity_show("sensor1")
     #print(entity.attributes[0].metadata.metadata)
 
-    #attr = Attribute("temp", "number", "15.5")
+    attr = Attribute("temp", "number", "15.5")
     #client.entity_create("room1", "Room", [attr])
 
-    client.attribute_data_update('room1', 'temp', 20)
+    #client.attribute_data_update('room1', 'temp', 20)
+    client.update_entity('room1', [attr])
     value = client.attribute_data_get('room1', 'temp')
     print(value)
