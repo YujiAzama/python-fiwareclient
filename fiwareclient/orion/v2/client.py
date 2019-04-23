@@ -18,9 +18,9 @@ class OrionClient(object):
             'Fiware-ServicePath': fsp
         }
 
-    def entities_list(self):
+    def entities_list(self, payload={}):
         url = self.base_url + '/entities'
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, params=payload)
         entities = []
         for entity in response.json():
             entities.append(self._dict_to_entity_object(entity))
@@ -93,21 +93,3 @@ class OrionClient(object):
             entity.add_attribute(attr)
 
         return entity
-
-
-if __name__ == '__main__':
-    client = OrionClient(host='118.27.13.26', fs='test', fsp='/test')
-    entities = client.entities_list()
-    #for entity in entities:
-    #    pprint(entity.json())
-
-    #entity = client.entity_show("sensor1")
-    #print(entity.attributes[0].metadata.metadata)
-
-    attr = Attribute("temp", "number", "15.5")
-    #client.entity_create("room1", "Room", [attr])
-
-    #client.attribute_data_update('room1', 'temp', 20)
-    client.update_entity('room1', [attr])
-    value = client.attribute_data_get('room1', 'temp')
-    print(value)
